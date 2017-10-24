@@ -1,13 +1,51 @@
 <!DOCTYPE html>
-<html ng-app>
+<html ng-app="app">
   <head>
     <meta charset="utf-8">
-    <title>Angular Reddit Clone</title>
+    <title>Data Binding</title>
   </head>
   <body>
-    <p>Say something to the world <input type="text" ng-model="greeting" ng-init="greeting='Hello, '"></p>
-    <p>{{ greeting }} world!</p>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.js">
+    <repeaters></repeaters>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.js"></script>
+    <script>
+    angular.module('app', [])
+      .component('repeaters', {
+        controller: controller,
+        template: `
+          <form ng-submit="$ctrl.addUser()">
+            <label>Name: <input type="text" ng-model="$ctrl.user.name"/></label>
+            <label>Age: <input type="text" ng-model="$ctrl.user.age"/></label>
+            <input type="submit"/>
+          </form>
+          <div ng-repeat="user in $ctrl.users">
+            <strong>{{ user.name }}</strong>: {{ user.age }}
+            <a href="#" ng-click="$ctrl.deleteUser($event, user)">❌</a
+          </div>
+        `
+      })
+
+    function controller() {
+      const vm = this
+
+      vm.$onInit = function () {
+        vm.users = [
+          {name:"mike", age:23},
+          {name:"andy", age:34},
+          {name:"reid", age:45},
+          {name:"reid", age:45},
+        ]
+      }
+
+      vm.addUser = function () {
+        vm.users.push(vm.user)
+        delete vm.user
+      }
+
+      vm.deleteUser = function (e, user) {
+        e.preventDefault()
+        vm.users.splice(vm.users.indexOf(user), 1)
+      }
+    }
     </script>
   </body>
 </html>
